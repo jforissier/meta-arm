@@ -29,6 +29,9 @@ EXTRA_OEMAKE += " \
     O=${B} \
 "
 
+PACKAGECONFIG[debug] = "CFG_TEE_CORE_LOG_LEVEL=3"
+EXTRA_OEMAKE:append = " ${PACKAGECONFIG_CONFARGS}"
+
 CFLAGS[unexport] = "1"
 LDFLAGS[unexport] = "1"
 CPPFLAGS[unexport] = "1"
