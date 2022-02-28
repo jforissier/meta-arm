@@ -2,6 +2,7 @@ header:
   version: 11
   includes:
     - ci/base.yml
+    - ci/meta-openembedded.yml
 
 machine: qemuarm64-secureboot
 
