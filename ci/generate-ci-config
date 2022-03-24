@@ -44,12 +44,17 @@ case $TEST_LEVEL in
 		;;
 esac
 
+# Disable external toolchain on machines where it isn't working
+if [ $MACHINE == "fvp-baser-aemv8r64" ]; then
+	TC=$(echo $TC | sed 's/, external-gccarm//g')
+fi
+
 #Only run testimage on machines that can handle it
 if [[ $(find . -name $MACHINE.conf -exec grep -l 'FVP_\|QB_' {} \;) != "" ]]; then
 	if [ $(grep -l "meta-zephyr\.yml" ci/$MACHINE.yml) ]; then
 		TEST="testimage-zephyr"
 	# FIXME - work around not having runfvp working on an fvp machine
-	elif [ $MACHINE == "fvp-baser-aemv8r64" ] || [ $MACHINE == "fvp-base-arm32" ]; then
+	elif [ $MACHINE == "fvp-baser-aemv8r64" ]; then
 		TEST="none"
 	else
 		TEST="testimage"
@@ -60,7 +65,7 @@ fi
 
 # Add Tags as needed
 case $MACHINE in
-	"fvp-base" | "tc"*) TAGS="  tags:\n    - x86_64";;
+	"fvp-base"* | "tc"*) TAGS="  tags:\n    - x86_64";;
 	*) TAGS="";;
 esac
 
