@@ -4,7 +4,9 @@ Description=TEE Supplicant
 [Service]
 User=root
 EnvironmentFile=-@sysconfdir@/default/tee-supplicant
-ExecStart=@sbindir@/tee-supplicant $OPTARGS
+EnvironmentFile=-@localstatedir@/run/tee-supplicant.env
+ExecStartPre=@sbindir@/create-tee-supplicant-env @localstatedir@/run/tee-supplicant.env
+ExecStart=@sbindir@/tee-supplicant $RPMB_CID $OPTARGS
 
 [Install]
 WantedBy=basic.target

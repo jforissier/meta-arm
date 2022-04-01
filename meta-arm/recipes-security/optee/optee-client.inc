@@ -11,6 +11,7 @@ SRC_URI = " \
     git://github.com/OP-TEE/optee_client.git \
     file://tee-supplicant.service \
     file://tee-supplicant.sh \
+    file://create-tee-supplicant-env \
 "
 
 UPSTREAM_CHECK_GITTAGREGEX = "^(?P<pver>\d+(\.\d+)+)$"
@@ -26,9 +27,11 @@ EXTRA_OECMAKE_append_toolchain-clang = " -DCFG_WERROR=0"
 do_install_append() {
     install -D -p -m0644 ${WORKDIR}/tee-supplicant.service ${D}${systemd_system_unitdir}/tee-supplicant.service
     install -D -p -m0755 ${WORKDIR}/tee-supplicant.sh ${D}${sysconfdir}/init.d/tee-supplicant
+    install -D -p -m0755 ${WORKDIR}/create-tee-supplicant-env ${D}${sbindir}/create-tee-supplicant-env
 
     sed -i -e s:@sysconfdir@:${sysconfdir}:g \
            -e s:@sbindir@:${sbindir}:g \
+           -e s:@localstatedir@:${localstatedir}:g \
               ${D}${systemd_system_unitdir}/tee-supplicant.service \
               ${D}${sysconfdir}/init.d/tee-supplicant
 }
